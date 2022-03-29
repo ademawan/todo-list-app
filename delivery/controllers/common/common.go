@@ -84,6 +84,22 @@ func InternalServerError(code interface{}, msg interface{}, data interface{}) Re
 		Data:    data,
 	}
 }
+func NotFound(code interface{}, msg interface{}, data interface{}) Response {
+	if code == nil {
+		code = http.StatusNotFound
+	}
+	if msg == nil {
+		msg = "Not found"
+	}
+	if data == nil {
+		data = nil
+	}
+	return Response{
+		Code:    code,
+		Message: msg,
+		Data:    data,
+	}
+}
 
 func BadRequest(code interface{}, msg interface{}, data interface{}) Response {
 	if code == nil {
