@@ -1,7 +1,7 @@
 package route
 
 import (
-	// "todo-list-app/delivery/controllers/auth"
+	"todo-list-app/delivery/controllers/auth"
 
 	"todo-list-app/delivery/controllers/user"
 	"todo-list-app/middlewares"
@@ -12,7 +12,7 @@ import (
 
 func RegisterPath(e *echo.Echo,
 	uc *user.UserController,
-	// aa *auth.AuthController,
+	aa *auth.AuthController,
 
 ) {
 
@@ -27,7 +27,7 @@ func RegisterPath(e *echo.Echo,
 
 	//ROUTE REGISTER - LOGIN USERS
 	e.POST("users/register", uc.Register())
-	// e.POST("users/login", aa.Login())
+	e.POST("users/login", aa.Login())
 
 	//ROUTE USERS
 	e.GET("/users/me", uc.GetByUid(), middlewares.JwtMiddleware())

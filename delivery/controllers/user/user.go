@@ -82,7 +82,7 @@ func (ac *UserController) GetByUid() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user_uid := middlewares.ExtractTokenUserUid(c)
 
-		res, err := ac.repo.GetById(user_uid)
+		res, err := ac.repo.GetByUid(user_uid)
 
 		if err != nil {
 			return c.JSON(http.StatusNotFound, common.InternalServerError(http.StatusNotFound, err.Error(), nil))
