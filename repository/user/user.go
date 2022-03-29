@@ -32,7 +32,7 @@ func (ur *UserRepository) Register(u entities.User) (entities.User, error) {
 	return u, nil
 }
 
-func (ur *UserRepository) GetById(user_uid string) (entities.User, error) {
+func (ur *UserRepository) GetByUid(user_uid string) (entities.User, error) {
 	arrUser := entities.User{}
 
 	result := ur.database.Preload("Task").Where("user_uid =?", user_uid).First(&arrUser)

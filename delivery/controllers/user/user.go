@@ -78,7 +78,7 @@ func (ac *UserController) Register() echo.HandlerFunc {
 	}
 }
 
-func (ac *UserController) GetById() echo.HandlerFunc {
+func (ac *UserController) GetByUid() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		user_uid := middlewares.ExtractTokenUserUid(c)
 
