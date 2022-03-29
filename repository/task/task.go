@@ -1,6 +1,7 @@
 package task
 
 import (
+	"errors"
 	"todo-list-app/entities"
 
 	"gorm.io/gorm"
@@ -24,46 +25,57 @@ func (tr *TaskRepository) Create(t entities.Task) (entities.Task, error) {
 	return t, nil
 }
 
-func (tr *TaskRepository) Get() ([]entities.Task, error) {
+func (tr *TaskRepository) Get(userUid string) ([]entities.Task, error) {
 	arrTask := []entities.Task{}
+	res := tr.database.Where("user_uid =?", userUid).Find(&arrTask)
 
-	if err := tr.database.Find(&arrTask).Error; err != nil {
-		return nil, err
+	if res.Error != nil {
+		return nil, errors.New("failed to get tasks")
+	}
+	if res.RowsAffected == 0 {
+		return arrTask, errors.New("task is empty")
 	}
 
 	return arrTask, nil
 }
 
-func (tr *TaskRepository) GetByUid(taskUid string) (entities.Task, error) {
-	arrTask := entities.Task{}
+func (tr *TaskRepository) GetByUid(userUid, taskUid string) (entities.Task, error) {
+	task := entities.Task{}
+	res := tr.database.Where("user_uid =? AND task_uid =?", userUid, taskUid).First(&task, taskUid)
 
-	if err := tr.database.First(&arrTask, taskUid).Error; err != nil {
-		return arrTask, err
+	if res.Error != nil {
+		return task, errors.New("failed to get task")
 	}
-
-	return arrTask, nil
-}
-
-func (tr *TaskRepository) Update(taskUid string, newTask entities.Task) (entities.Task, error) {
-
-	var task entities.Task
-	tr.database.First(&task, taskUid)
-
-	if err := tr.database.Model(&task).Updates(&newTask).Error; err != nil {
-		return task, err
+	if res.RowsAffected == 0 {
+		return task, errors.New("task not found")
 	}
 
 	return task, nil
 }
 
-func (tr *TaskRepository) Delete(taskUid string) error {
+func (tr *TaskRepository) Update(taskUid string, newTask entities.Task) (entities.Task, error) {
 
 	var task entities.Task
-
-	if err := tr.database.First(&task, taskUid).Error; err != nil {
-		return err
+	res := tr.database.Where("user_uid =? AND task_uid =?", newTask.UserUid, taskUid).First(&task)
+	if res.Error != nil {
+		return entities.Task{}, errors.New("failed to update task")
 	}
-	tr.database.Delete(&task, taskUid)
+	if res.RowsAffected == 0 {
+		return entities.Task{}, errors.New("task not found")
+	}
+
+	if err := tr.database.Model(&task).Updates(&newTask).Error; err != nil {
+		return entities.Task{}, errors.New("failed to update task")
+	}
+
+	return task, nil
+}
+
+func (tr *TaskRepository) Delete(userUid, taskUid string) error {
+	res := tr.database.Where("user_uid =? AND task_uid =?", userUid, taskUid).Delete(&entities.Task{})
+	if res.Error != nil {
+		return res.Error
+	}
 	return nil
 
 }

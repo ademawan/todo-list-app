@@ -15,5 +15,6 @@ type UserLoginResponse struct {
 	User_uid string `json:"user_uid"`
 	Name     string `json:"name"`
 	Email    string `json:"email"`
+	Gender   string `json:"gender"`
 	Token    string `json:"token"`
 }

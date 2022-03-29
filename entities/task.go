@@ -11,8 +11,7 @@ type Task struct {
 	UserUid  string `gorm:"index;type:varchar(22)" json:"user_uid"`
 	Title    string `gorm:"type:varchar(30)" json:"title"`
 	Priority string `gorm:"type:enum('hight','medium','low')" json:"gender"`
-	User_ID  int    `gorm:"index;column:user_id" json:"user_id"`
-	Status   int    `gorm:"type:enum('done','undone','ignore')" json:"status"`
+	Status   string `gorm:"type:enum('done','undone','ignore','waithing');default:'waithing'" json:"status"`
 	Note     string `gorm:"type:varchar(250)" json:"note"`
 
 	CreatedAt      time.Time      `json:"-"`

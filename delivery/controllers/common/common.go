@@ -117,3 +117,11 @@ func BadRequest(code interface{}, msg interface{}, data interface{}) Response {
 		Data:    data,
 	}
 }
+
+func ResponseUser(code interface{}, message interface{}, data interface{}) Response {
+	return Response{
+		Code:    code,
+		Message: message,
+		Data:    data,
+	}
+}

@@ -2,6 +2,7 @@ package route
 
 import (
 	"todo-list-app/delivery/controllers/auth"
+	"todo-list-app/delivery/controllers/task"
 
 	"todo-list-app/delivery/controllers/user"
 	"todo-list-app/middlewares"
@@ -13,6 +14,7 @@ import (
 func RegisterPath(e *echo.Echo,
 	uc *user.UserController,
 	aa *auth.AuthController,
+	tc *task.TaskController,
 
 ) {
 
@@ -33,5 +35,10 @@ func RegisterPath(e *echo.Echo,
 	e.GET("/users/me", uc.GetByUid(), middlewares.JwtMiddleware())
 	e.PUT("/users/me", uc.Update(), middlewares.JwtMiddleware())
 	e.DELETE("/users/me", uc.Delete(), middlewares.JwtMiddleware())
-
+	//ROUTE Task
+	e.POST("/users/me/tasks", tc.Create(), middlewares.JwtMiddleware())
+	e.GET("/users/me/tasks", tc.GetByUid(), middlewares.JwtMiddleware())
+	e.GET("/users/me/tasks/:task_uid", tc.GetByUid(), middlewares.JwtMiddleware())
+	e.PUT("/users/me/tasks/:task_uid", tc.Update(), middlewares.JwtMiddleware())
+	e.DELETE("/users/me/tasks/:task_uid", tc.Delete(), middlewares.JwtMiddleware())
 }

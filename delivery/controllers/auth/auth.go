@@ -46,6 +46,7 @@ func (ac *AuthController) Login() echo.HandlerFunc {
 			User_uid: checkedUser.UserUid,
 			Name:     checkedUser.Name,
 			Email:    checkedUser.Email,
+			Gender:   checkedUser.Gender,
 			Token:    token,
 		}
 
@@ -53,7 +54,7 @@ func (ac *AuthController) Login() echo.HandlerFunc {
 			return c.JSON(http.StatusNotAcceptable, common.BadRequest(http.StatusNotAcceptable, "error in process token", nil))
 		}
 
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "USERS - berhasil masuk, mendapatkan token baru", response))
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "Login successfully", response))
 
 	}
 }

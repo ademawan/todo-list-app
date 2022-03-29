@@ -3,9 +3,9 @@ package task
 import "todo-list-app/entities"
 
 type Task interface {
-	Get() ([]entities.Task, error)
-	GetById(taskId int) (entities.Task, error)
-	TaskRegister(newTask entities.Task) (entities.Task, error)
-	Update(taskId int, newTask entities.Task) (entities.Task, error)
-	Delete(taskId int) error
+	Get(userUid string) ([]entities.Task, error)
+	GetByUid(userUid, taskId string) (entities.Task, error)
+	Create(newTask entities.Task) (entities.Task, error)
+	Update(taskUid string, newTask entities.Task) (entities.Task, error)
+	Delete(userUid, taskUid string) error
 }
