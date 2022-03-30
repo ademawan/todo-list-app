@@ -1,4 +1,4 @@
-package route
+package routes
 
 import (
 	"todo-list-app/delivery/controllers/auth"
@@ -12,8 +12,8 @@ import (
 )
 
 func RegisterPath(e *echo.Echo,
-	uc *user.UserController,
 	aa *auth.AuthController,
+	uc *user.UserController,
 	tc *task.TaskController,
 
 ) {

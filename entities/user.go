@@ -18,5 +18,5 @@ type User struct {
 	UpdatedAt time.Time      `gorm:"-" json:"-"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 
-	Task []Task `gorm:"ForeignKey:UserUid"`
+	Task []Task `gorm:"ForeignKey:UserUid; references:UserUid"`
 }

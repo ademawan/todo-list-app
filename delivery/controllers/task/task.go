@@ -39,10 +39,10 @@ func (tc *TaskController) Create() echo.HandlerFunc {
 		})
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, common.InternalServerError(http.StatusInternalServerError, "There is some error on server", nil))
+			return c.JSON(http.StatusInternalServerError, common.ResponseUser(http.StatusInternalServerError, "There is some error on server", nil))
 		}
 
-		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "Success Create Task", res))
+		return c.JSON(http.StatusCreated, common.ResponseUser(http.StatusCreated, "Success Create Task", res))
 	}
 }
 
@@ -132,6 +132,6 @@ func (tc *TaskController) Delete() echo.HandlerFunc {
 			return c.JSON(http.StatusNotFound, common.ResponseUser(http.StatusNotFound, "not found", nil))
 		}
 
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "Success delete task", nil))
+		return c.JSON(http.StatusOK, common.ResponseUser(http.StatusOK, "Success delete task", nil))
 	}
 }
