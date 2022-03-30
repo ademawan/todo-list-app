@@ -1,5 +1,3 @@
 package configs
 
-var (
-	JWT_SECRET = "RAHASIABOR!!"
-)
+const JWT_SECRET = "secret"

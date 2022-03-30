@@ -51,7 +51,7 @@ func (ur *UserRepository) Update(user_uid string, newUser entities.User) (entiti
 	var user entities.User
 	ur.database.Where("user_uid =?", user_uid).First(&user)
 
-	if err := ur.database.Model(&user).Updates(&newUser).Error; err != nil {
+	if err := ur.database.Model(&user).Where("user_uid =?", user_uid).Updates(&newUser).Error; err != nil {
 		return user, err
 	}
 

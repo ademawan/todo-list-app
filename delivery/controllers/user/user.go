@@ -69,6 +69,7 @@ func (ac *UserController) Register() echo.HandlerFunc {
 		response.User_uid = res.UserUid
 		response.Name = res.Name
 		response.Email = res.Email
+		response.Address = res.Address
 		response.Gender = res.Gender
 		// response.Roles = res.Roles
 		// response.Image = res.Image
@@ -146,6 +147,7 @@ func (ac *UserController) Update() echo.HandlerFunc {
 		response.User_uid = res.UserUid
 		response.Name = res.Name
 		response.Email = res.Email
+		response.Address = res.Address
 		response.Gender = res.Gender
 		// response.Roles = res.Roles
 		// response.Image = res.Image

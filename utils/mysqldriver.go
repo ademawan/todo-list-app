@@ -2,8 +2,14 @@ package utils
 
 import (
 	"fmt"
+	"time"
 	"todo-list-app/configs"
 	"todo-list-app/entities"
+	"todo-list-app/middlewares"
+
+	"github.com/lithammer/shortuuid"
+
+	"github.com/bxcodec/faker/v3"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/driver/mysql"
@@ -37,19 +43,60 @@ func InitMigrate(db *gorm.DB) {
 	db.Migrator().DropTable(&entities.User{})
 	db.AutoMigrate(&entities.User{})
 	db.AutoMigrate(&entities.Task{})
-	// // for i := 0; i < 2000; i++ {
-	// // 	db.Create(&entities.User{
-	// // 		Nama:     faker.Name(),
-	// // 		Email:    faker.Email(),
-	// // 		Password: "xyz",
-	// // 	})
-	// // }
 
-	// for i := 0; i < 500; i++ {
-	// 	db.Create(&entities.Task{
-	// 		Nama:       faker.TitleMale(),
-	// 		User_ID:    int(math.Round(float64(rand.Intn(20)))),
-	// 		Project_ID: int(math.Round(float64(rand.Intn(100)))),
-	// 	})
-	// }
+	// var userUid []string
+
+	for i := 0; i < 50; i++ {
+
+		userUid := shortuuid.New()
+		password, _ := middlewares.HashPassword("xyz")
+
+		db.Create(&entities.User{
+			UserUid:  userUid,
+			Name:     faker.Name(),
+			Email:    faker.Email(),
+			Password: password,
+			Address:  "jl.dramaga no.22",
+			Gender:   "female",
+		})
+		taskUid := shortuuid.New()
+
+		db.Create(&entities.Task{
+			TaskUid:        taskUid,
+			Title:          faker.TitleMale(),
+			Priority:       "hight",
+			UserUid:        userUid,
+			Status:         "waithing",
+			Note:           "catatan catatan catatan",
+			Todo_date_time: time.Now(),
+		})
+
+	}
+
+	for i := 0; i < 50; i++ {
+
+		userUid := shortuuid.New()
+		password, _ := middlewares.HashPassword("xyz")
+
+		db.Create(&entities.User{
+			UserUid:  userUid,
+			Name:     faker.Name(),
+			Email:    faker.Email(),
+			Password: password,
+			Address:  "jl.dramaga no.22",
+			Gender:   "male",
+		})
+		taskUid := shortuuid.New()
+
+		db.Create(&entities.Task{
+			TaskUid:        taskUid,
+			Title:          faker.TitleMale(),
+			Priority:       "hight",
+			UserUid:        userUid,
+			Status:         "waithing",
+			Note:           "catatan catatan catatan",
+			Todo_date_time: time.Now(),
+		})
+
+	}
 }

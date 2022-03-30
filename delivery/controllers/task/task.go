@@ -42,7 +42,7 @@ func (tc *TaskController) Create() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, common.ResponseUser(http.StatusInternalServerError, "There is some error on server", nil))
 		}
 
-		return c.JSON(http.StatusCreated, common.ResponseUser(http.StatusCreated, "Success Create Task", res))
+		return c.JSON(http.StatusCreated, common.ResponseUser(http.StatusCreated, "Success create task", res))
 	}
 }
 

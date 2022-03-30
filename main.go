@@ -40,6 +40,7 @@ func main() {
 	taskController := tc.New(taskRepo)
 
 	e := echo.New()
+	e.Validator = &CustomValidator{validator: validator.New()}
 
 	routes.RegisterPath(e, authController, userController, taskController)
 

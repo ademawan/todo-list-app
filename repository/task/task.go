@@ -41,7 +41,7 @@ func (tr *TaskRepository) Get(userUid string) ([]entities.Task, error) {
 
 func (tr *TaskRepository) GetByUid(userUid, taskUid string) (entities.Task, error) {
 	task := entities.Task{}
-	res := tr.database.Where("user_uid =? AND task_uid =?", userUid, taskUid).First(&task, taskUid)
+	res := tr.database.Where("user_uid =? AND task_uid =?", userUid, taskUid).First(&task)
 
 	if res.Error != nil {
 		return task, errors.New("failed to get task")
