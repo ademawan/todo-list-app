@@ -19,37 +19,37 @@ func New(db *gorm.DB) *UserRepository {
 	}
 }
 
-func (ur *UserRepository) Register(u entities.User) (entities.User, error) {
+func (ur *UserRepository) Register(user entities.User) (entities.User, error) {
 
-	u.Password, _ = middlewares.HashPassword(u.Password)
+	user.Password, _ = middlewares.HashPassword(user.Password)
 	uid := shortuuid.New()
-	u.UserUid = uid
+	user.UserUid = uid
 
-	if err := ur.database.Create(&u).Error; err != nil {
-		return u, errors.New("invalid input or this email was created (duplicated entry)")
+	if err := ur.database.Create(&user).Error; err != nil {
+		return user, errors.New("invalid input or this email was created (duplicated entry)")
 	}
 
-	return u, nil
+	return user, nil
 }
 
-func (ur *UserRepository) GetByUid(user_uid string) (entities.User, error) {
+func (ur *UserRepository) GetByUid(userUid string) (entities.User, error) {
 	arrUser := entities.User{}
 
-	result := ur.database.Preload("Task").Where("user_uid =?", user_uid).First(&arrUser)
-	if result.RowsAffected == 0 {
-		return arrUser, errors.New("record not found")
-	}
+	result := ur.database.Preload("Task").Where("user_uid =?", userUid).First(&arrUser)
 	if err := result.Error; err != nil {
 		return arrUser, err
+	}
+	if result.RowsAffected == 0 {
+		return arrUser, errors.New("record not found")
 	}
 
 	return arrUser, nil
 }
 
-func (ur *UserRepository) Update(user_uid string, newUser entities.User) (entities.User, error) {
+func (ur *UserRepository) Update(userUid string, newUser entities.User) (entities.User, error) {
 
 	var user entities.User
-	ur.database.Where("user_uid =?", user_uid).First(&user)
+	ur.database.Where("user_uid =?", userUid).First(&user)
 
 	if err := ur.database.Model(&user).Updates(&newUser).Error; err != nil {
 		return user, err
@@ -58,11 +58,13 @@ func (ur *UserRepository) Update(user_uid string, newUser entities.User) (entiti
 	return user, nil
 }
 
-func (ur *UserRepository) Delete(user_uid string) error {
+func (ur *UserRepository) Delete(userUid string) error {
 
-	if err := ur.database.Where("user_uid = ?", user_uid).Delete(&entities.User{}).Error; err != nil {
-		return err
+	result := ur.database.Where("user_uid =?", userUid).Delete(&entities.Task{})
+	if result.Error != nil {
+		return result.Error
 	}
+
 	return nil
 
 }
