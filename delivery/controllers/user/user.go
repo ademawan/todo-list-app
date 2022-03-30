@@ -33,7 +33,7 @@ func (ac *UserController) Register() echo.HandlerFunc {
 		err := c.Validate(&user)
 
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, common.BadRequest(http.StatusBadRequest, "There is some problem from input", nil))
+			return c.JSON(http.StatusBadRequest, common.ResponseUser(http.StatusBadRequest, "There is some problem from input", nil))
 		}
 
 		// file, errO := c.FormFile("image")
@@ -56,51 +56,59 @@ func (ac *UserController) Register() echo.HandlerFunc {
 			Name:     user.Name,
 			Email:    user.Email,
 			Password: user.Password,
+			Address:  user.Address,
 			Gender:   user.Gender,
 			// response.Image = res.Image
 
 		})
 
 		if err_repo != nil {
-			return c.JSON(http.StatusConflict, common.InternalServerError(http.StatusConflict, err_repo.Error(), nil))
+			return c.JSON(http.StatusConflict, common.ResponseUser(http.StatusConflict, err_repo.Error(), nil))
 		}
 
 		response := UserCreateResponse{}
-		response.User_uid = res.UserUid
+		response.UserUid = res.UserUid
 		response.Name = res.Name
 		response.Email = res.Email
+		response.Address = res.Address
 		response.Gender = res.Gender
 		// response.Roles = res.Roles
 		// response.Image = res.Image
 
-		return c.JSON(http.StatusCreated, common.Success(http.StatusCreated, "Success Create User", response))
+		return c.JSON(http.StatusCreated, common.ResponseUser(http.StatusCreated, "Success create user", response))
 
 	}
 }
 
 func (ac *UserController) GetByUid() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		user_uid := middlewares.ExtractTokenUserUid(c)
+		userUid := middlewares.ExtractTokenUserUid(c)
 
-		res, err := ac.repo.GetByUid(user_uid)
+		res, err := ac.repo.GetByUid(userUid)
 
 		if err != nil {
-			return c.JSON(http.StatusNotFound, common.InternalServerError(http.StatusNotFound, err.Error(), nil))
+			statusCode := http.StatusInternalServerError
+			errorMessage := "There is some problem from the server"
+			if err.Error() == "record not found" {
+				statusCode = http.StatusNotFound
+				errorMessage = err.Error()
+			}
+			return c.JSON(statusCode, common.ResponseUser(http.StatusNotFound, errorMessage, nil))
 		}
 
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "Success get user", res))
+		return c.JSON(http.StatusOK, common.ResponseUser(http.StatusOK, "Success get user", res))
 	}
 }
 
 func (ac *UserController) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		user_uid := middlewares.ExtractTokenUserUid(c)
+		userUid := middlewares.ExtractTokenUserUid(c)
 		var newUser = UpdateUserRequestFormat{}
 		c.Bind(&newUser)
 
 		err := c.Validate(&newUser)
 		if err != nil {
-			return c.JSON(http.StatusBadRequest, common.BadRequest(http.StatusBadRequest, "There is some problem from input", nil))
+			return c.JSON(http.StatusBadRequest, common.ResponseUser(http.StatusBadRequest, "There is some problem from input", nil))
 		}
 
 		// resGet, errGet := ac.repo.GetById(user_uid)
@@ -130,39 +138,41 @@ func (ac *UserController) Update() echo.HandlerFunc {
 		// 	}
 		// }
 
-		res, err_repo := ac.repo.Update(user_uid, entities.User{
+		res, err_repo := ac.repo.Update(userUid, entities.User{
 			Name:     newUser.Name,
 			Email:    newUser.Email,
 			Password: newUser.Password,
+			Address:  newUser.Address,
 			Gender:   newUser.Gender,
 			// Image:    newUser.Image,
 		})
 
 		if err_repo != nil {
-			return c.JSON(http.StatusInternalServerError, common.InternalServerError(http.StatusInternalServerError, "There is some error on server", nil))
+			return c.JSON(http.StatusInternalServerError, common.ResponseUser(http.StatusInternalServerError, "There is some error on server", nil))
 		}
 
 		response := UserUpdateResponse{}
-		response.User_uid = res.UserUid
+		response.UserUid = res.UserUid
 		response.Name = res.Name
 		response.Email = res.Email
+		response.Address = res.Address
 		response.Gender = res.Gender
 		// response.Roles = res.Roles
 		// response.Image = res.Image
 
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "Success Update User", response))
+		return c.JSON(http.StatusOK, common.ResponseUser(http.StatusOK, "Success update user", response))
 	}
 }
 
 func (ac *UserController) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		user_uid := middlewares.ExtractTokenUserUid(c)
-		err := ac.repo.Delete(user_uid)
+		userUid := middlewares.ExtractTokenUserUid(c)
+		err := ac.repo.Delete(userUid)
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, common.InternalServerError(http.StatusInternalServerError, "There is some error on server", nil))
+			return c.JSON(http.StatusInternalServerError, common.ResponseUser(http.StatusInternalServerError, "There is some error on server", nil))
 		}
 
-		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "Success Delete User", nil))
+		return c.JSON(http.StatusOK, common.ResponseUser(http.StatusOK, "Success delete user", nil))
 	}
 }
