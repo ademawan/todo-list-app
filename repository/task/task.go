@@ -27,12 +27,12 @@ func (tr *TaskRepository) Create(t entities.Task) (entities.Task, error) {
 
 func (tr *TaskRepository) Get(userUid string) ([]entities.Task, error) {
 	arrTask := []entities.Task{}
-	res := tr.database.Where("user_uid =?", userUid).Find(&arrTask)
+	result := tr.database.Where("user_uid =?", userUid).Find(&arrTask)
 
-	if res.Error != nil {
+	if result.Error != nil {
 		return nil, errors.New("failed to get tasks")
 	}
-	if res.RowsAffected == 0 {
+	if result.RowsAffected == 0 {
 		return arrTask, errors.New("task is empty")
 	}
 
@@ -41,12 +41,12 @@ func (tr *TaskRepository) Get(userUid string) ([]entities.Task, error) {
 
 func (tr *TaskRepository) GetByUid(userUid, taskUid string) (entities.Task, error) {
 	task := entities.Task{}
-	res := tr.database.Where("user_uid =? AND task_uid =?", userUid, taskUid).First(&task, taskUid)
+	result := tr.database.Where("user_uid =? AND task_uid =?", userUid, taskUid).First(&task, taskUid)
 
-	if res.Error != nil {
+	if result.Error != nil {
 		return task, errors.New("failed to get task")
 	}
-	if res.RowsAffected == 0 {
+	if result.RowsAffected == 0 {
 		return task, errors.New("task not found")
 	}
 
@@ -56,11 +56,11 @@ func (tr *TaskRepository) GetByUid(userUid, taskUid string) (entities.Task, erro
 func (tr *TaskRepository) Update(taskUid string, newTask entities.Task) (entities.Task, error) {
 
 	var task entities.Task
-	res := tr.database.Where("user_uid =? AND task_uid =?", newTask.UserUid, taskUid).First(&task)
-	if res.Error != nil {
+	result := tr.database.Where("user_uid =? AND task_uid =?", newTask.UserUid, taskUid).First(&task)
+	if result.Error != nil {
 		return entities.Task{}, errors.New("failed to update task")
 	}
-	if res.RowsAffected == 0 {
+	if result.RowsAffected == 0 {
 		return entities.Task{}, errors.New("task not found")
 	}
 
@@ -72,9 +72,9 @@ func (tr *TaskRepository) Update(taskUid string, newTask entities.Task) (entitie
 }
 
 func (tr *TaskRepository) Delete(userUid, taskUid string) error {
-	res := tr.database.Where("user_uid =? AND task_uid =?", userUid, taskUid).Delete(&entities.Task{})
-	if res.Error != nil {
-		return res.Error
+	result := tr.database.Where("user_uid =? AND task_uid =?", userUid, taskUid).Delete(&entities.Task{})
+	if result.Error != nil {
+		return result.Error
 	}
 	return nil
 
