@@ -12,7 +12,7 @@ type User struct {
 	Email    string `gorm:"unique" json:"email"`
 	Password string `json:"-"`
 	Address  string `gorm:"type:varchar(200)" json:"address"`
-	Gender   string `gorm:"type:enum('male','female')" json:"gender"`
+	Gender   string `gorm:"type:varchar(20)" json:"gender"`
 
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `gorm:"-" json:"-"`
