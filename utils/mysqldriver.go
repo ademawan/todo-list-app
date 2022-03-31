@@ -6,7 +6,8 @@ import (
 	"todo-list-app/configs"
 	"todo-list-app/entities"
 	"todo-list-app/middlewares"
-	"todo-list-app/vendor/github.com/lithammer/shortuuid"
+
+	"github.com/lithammer/shortuuid"
 
 	"github.com/labstack/gommon/log"
 	"gorm.io/driver/mysql"
