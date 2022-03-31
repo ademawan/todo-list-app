@@ -125,3 +125,18 @@ func ResponseUser(code interface{}, message interface{}, data interface{}) Respo
 		Data:    data,
 	}
 }
+func ResponseUsers(code interface{}, message interface{}, data interface{}) Response {
+	type datas struct{}
+	if data == nil {
+		return Response{
+			Code:    code,
+			Message: message,
+			Data:    []datas{},
+		}
+	}
+	return Response{
+		Code:    code,
+		Message: message,
+		Data:    data,
+	}
+}

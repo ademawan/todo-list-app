@@ -62,7 +62,7 @@ func (tc *TaskController) Get() echo.HandlerFunc {
 				statusCode = http.StatusOK
 				errorMessage = err.Error()
 			}
-			return c.JSON(statusCode, common.ResponseUser(statusCode, errorMessage, nil))
+			return c.JSON(statusCode, common.ResponseUsers(statusCode, errorMessage, nil))
 		}
 
 		return c.JSON(http.StatusOK, common.ResponseUser(http.StatusOK, "Success get all task", res))
