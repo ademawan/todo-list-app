@@ -15,7 +15,7 @@ import (
 )
 
 func InitDB(config *configs.AppConfig) *gorm.DB {
-	//mysql ================
+	//mysql ==============
 
 	// connectionString := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8&parseTime=True&loc=Local",
 	// 	config.Database.Username,
