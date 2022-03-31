@@ -9,8 +9,6 @@ import (
 
 	"github.com/lithammer/shortuuid"
 
-	"github.com/bxcodec/faker/v3"
-
 	"github.com/labstack/gommon/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -44,58 +42,73 @@ func InitMigrate(db *gorm.DB) {
 	db.AutoMigrate(&entities.User{})
 	db.AutoMigrate(&entities.Task{})
 
+	userUid := shortuuid.New()
+	password, _ := middlewares.HashPassword("xyz")
+
+	db.Create(&entities.User{
+		UserUid:  userUid,
+		Name:     "Ade Mawan",
+		Email:    "anonimus@gmail.com",
+		Password: password,
+		Address:  "jl.dramaga no.22",
+		Gender:   "male",
+	})
+
 	// var userUid []string
 
-	for i := 0; i < 50; i++ {
+	// for i := 0; i < 50; i++ {
 
-		userUid := shortuuid.New()
-		password, _ := middlewares.HashPassword("xyz")
+	// 	userUid := shortuuid.New()
+	// 	password, _ := middlewares.HashPassword("xyz")
 
-		db.Create(&entities.User{
-			UserUid:  userUid,
-			Name:     faker.Name(),
-			Email:    faker.Email(),
-			Password: password,
-			Address:  "jl.dramaga no.22",
-			Gender:   "female",
-		})
+	// 	db.Create(&entities.User{
+	// 		UserUid:  userUid,
+	// 		Name:     faker.Name(),
+	// 		Email:    faker.Email(),
+	// 		Password: password,
+	// 		Address:  "jl.dramaga no.22",
+	// 		Gender:   "female",
+	// 	})
+	// 	taskUid := shortuuid.New()
+
+	// 	db.Create(&entities.Task{
+	// 		TaskUid:        taskUid,
+	// 		Title:          faker.TitleMale(),
+	// 		Priority:       "hight",
+	// 		UserUid:        userUid,
+	// 		Status:         "waithing",
+	// 		Note:           "catatan catatan catatan",
+	// 		Todo_date_time: time.Now(),
+	// 	})
+
+	// }
+
+	for i := 0; i < 20; i++ {
+
+		// userUid := shortuuid.New()
+		// password, _ := middlewares.HashPassword("xyz")
+
+		// db.Create(&entities.User{
+		// 	UserUid:  userUid,
+		// 	Name:     faker.Name(),
+		// 	Email:    faker.Email(),
+		// 	Password: password,
+		// 	Address:  "jl.dramaga no.22",
+		// 	Gender:   "male",
+		// })
 		taskUid := shortuuid.New()
+
+		layoutFormat := "2006-01-02T15:04"
+		todoDateTime, _ := time.Parse(layoutFormat, "2022-03-31T12:26")
 
 		db.Create(&entities.Task{
 			TaskUid:        taskUid,
-			Title:          faker.TitleMale(),
+			Title:          "testing title blabla",
 			Priority:       "hight",
 			UserUid:        userUid,
 			Status:         "waithing",
 			Note:           "catatan catatan catatan",
-			Todo_date_time: time.Now(),
-		})
-
-	}
-
-	for i := 0; i < 50; i++ {
-
-		userUid := shortuuid.New()
-		password, _ := middlewares.HashPassword("xyz")
-
-		db.Create(&entities.User{
-			UserUid:  userUid,
-			Name:     faker.Name(),
-			Email:    faker.Email(),
-			Password: password,
-			Address:  "jl.dramaga no.22",
-			Gender:   "male",
-		})
-		taskUid := shortuuid.New()
-
-		db.Create(&entities.Task{
-			TaskUid:        taskUid,
-			Title:          faker.TitleMale(),
-			Priority:       "hight",
-			UserUid:        userUid,
-			Status:         "waithing",
-			Note:           "catatan catatan catatan",
-			Todo_date_time: time.Now(),
+			Todo_date_time: todoDateTime,
 		})
 
 	}

@@ -8,4 +8,5 @@ type Task interface {
 	Create(newTask entities.Task) (entities.Task, error)
 	Update(taskUid string, newTask entities.Task) (entities.Task, error)
 	Delete(userUid, taskUid string) error
+	GetTaskToday(userUid string) ([]entities.Task, error)
 }

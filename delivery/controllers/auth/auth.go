@@ -3,8 +3,11 @@ package auth
 import (
 	"net/http"
 	"todo-list-app/delivery/controllers/common"
+	"todo-list-app/entities"
 	"todo-list-app/middlewares"
 	"todo-list-app/repository/auth"
+
+	"github.com/labstack/gommon/log"
 
 	"github.com/labstack/echo/v4"
 )
@@ -55,6 +58,17 @@ func (ac *AuthController) Login() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "Login successfully", response))
+
+	}
+}
+func (ac *AuthController) Logout() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		userUid := middlewares.ExtractTokenUserUid(c)
+		log.Info(userUid)
+		token, _ := middlewares.GenerateToken(entities.User{UserUid: "xxx"})
+		log.Info(token)
+
+		return c.JSON(http.StatusOK, common.Success(http.StatusOK, "Logout successfully", nil))
 
 	}
 }

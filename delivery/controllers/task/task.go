@@ -2,6 +2,7 @@ package task
 
 import (
 	"net/http"
+	"time"
 	"todo-list-app/delivery/controllers/common"
 	"todo-list-app/entities"
 	"todo-list-app/middlewares"
@@ -29,13 +30,15 @@ func (tc *TaskController) Create() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, common.ResponseUser(http.StatusBadRequest, "There is some problem from input", nil))
 		}
+		layoutFormat := "2006-01-02T15:04"
+		todoDateTime, _ := time.Parse(layoutFormat, task.Todo_date_time)
 
 		res, err := tc.repo.Create(entities.Task{
 			UserUid:        userUid,
 			Title:          task.Title,
 			Priority:       task.Priority,
 			Note:           task.Note,
-			Todo_date_time: task.Todo_date_time,
+			Todo_date_time: todoDateTime,
 		})
 
 		if err != nil {
@@ -51,6 +54,26 @@ func (tc *TaskController) Get() echo.HandlerFunc {
 		userUid := middlewares.ExtractTokenUserUid(c)
 
 		res, err := tc.repo.Get(userUid)
+
+		if err != nil {
+			statusCode := http.StatusInternalServerError
+			errorMessage := "There is some problem from the server"
+			if err.Error() == "task is empty" {
+				statusCode = http.StatusOK
+				errorMessage = err.Error()
+			}
+			return c.JSON(statusCode, common.ResponseUser(statusCode, errorMessage, nil))
+		}
+
+		return c.JSON(http.StatusOK, common.ResponseUser(http.StatusOK, "Success get all task", res))
+	}
+}
+
+func (tc *TaskController) GetTaskToday() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		userUid := middlewares.ExtractTokenUserUid(c)
+
+		res, err := tc.repo.GetTaskToday(userUid)
 
 		if err != nil {
 			statusCode := http.StatusInternalServerError
@@ -98,13 +121,17 @@ func (tc *TaskController) Update() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, common.ResponseUser(http.StatusBadRequest, "There is some problem from input", nil))
 		}
+
+		layoutFormat := "2006-01-02T15:04"
+		todoDateTime, _ := time.Parse(layoutFormat, newTask.Todo_date_time)
+
 		res, err := tc.repo.Update(taskUid, entities.Task{
 			UserUid:        userUid,
 			Title:          newTask.Title,
 			Priority:       newTask.Priority,
 			Status:         newTask.Status,
 			Note:           newTask.Note,
-			Todo_date_time: newTask.Todo_date_time,
+			Todo_date_time: todoDateTime,
 		})
 
 		if err != nil {

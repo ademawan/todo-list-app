@@ -30,6 +30,7 @@ func RegisterPath(e *echo.Echo,
 	//ROUTE REGISTER - LOGIN USERS
 	e.POST("users/register", uc.Register())
 	e.POST("users/login", aa.Login())
+	e.POST("users/logout", aa.Logout(), middlewares.JwtMiddleware())
 
 	//ROUTE USERS
 	e.GET("/users/me", uc.GetByUid(), middlewares.JwtMiddleware())
@@ -37,7 +38,8 @@ func RegisterPath(e *echo.Echo,
 	e.DELETE("/users/me", uc.Delete(), middlewares.JwtMiddleware())
 	//ROUTE Task
 	e.POST("/users/me/tasks", tc.Create(), middlewares.JwtMiddleware())
-	e.GET("/users/me/tasks", tc.GetByUid(), middlewares.JwtMiddleware())
+	e.GET("/users/me/tasks", tc.Get(), middlewares.JwtMiddleware())
+	e.GET("/users/me/tasks/today", tc.GetTaskToday(), middlewares.JwtMiddleware())
 	e.GET("/users/me/tasks/:task_uid", tc.GetByUid(), middlewares.JwtMiddleware())
 	e.PUT("/users/me/tasks/:task_uid", tc.Update(), middlewares.JwtMiddleware())
 	e.DELETE("/users/me/tasks/:task_uid", tc.Delete(), middlewares.JwtMiddleware())

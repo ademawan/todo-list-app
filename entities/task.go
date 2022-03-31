@@ -10,7 +10,7 @@ type Task struct {
 	TaskUid  string `gorm:"index;unique;type:varchar(22)" json:"task_uid"`
 	UserUid  string `gorm:"index;type:varchar(22)" json:"-"`
 	Title    string `gorm:"type:varchar(30)" json:"title"`
-	Priority string `gorm:"type:enum('hight','medium','low')" json:"gender"`
+	Priority string `gorm:"type:enum('hight','medium','low')" json:"priority"`
 	Status   string `gorm:"type:enum('done','undone','ignore','waithing');default:'waithing'" json:"status"`
 	Note     string `gorm:"type:varchar(250)" json:"note"`
 

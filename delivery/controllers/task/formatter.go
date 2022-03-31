@@ -1,7 +1,6 @@
 package task
 
 import (
-	"time"
 	"todo-list-app/entities"
 )
 
@@ -10,19 +9,19 @@ import (
 //----------------------------------------------------
 type TaskRequestFormat struct {
 	UserUid        string
-	Title          string    `json:"title" form:"title" validate:"required,min=3,max=20,excludesall=!@#?^#*()_+-=0123456789%&"`
-	Priority       string    `json:"priority" form:"priority" validate:"required,min=3,max=20,excludesall=!@#?^#*()_+-=0123456789%&"`
-	Note           string    `json:"note" form:"note"`
-	Todo_date_time time.Time `json:"todo_date_time" form:"todo_date_time"`
+	Title          string `json:"title" form:"title" validate:"required,min=3,max=20,excludesall=!@#?^#*()_+-=0123456789%&"`
+	Priority       string `json:"priority" form:"priority" validate:"required,min=3,max=20,excludesall=!@#?^#*()_+-=0123456789%&"`
+	Note           string `json:"note" form:"note"`
+	Todo_date_time string `json:"todo_date_time" form:"todo_date_time"`
 }
 
 type UpdateTaskRequestFormat struct {
 	UserUid        string
-	Title          string    `json:"title" form:"title"  validate:"omitempty,min=3,max=50,excludesall=!@#?^#*()_+-=0123456789%&"`
-	Priority       string    `json:"priority" form:"priority"  validate:"omitempty,min=3,max=6,excludesall=!@#?^#*()_+-=0123456789%&"`
-	Status         string    `json:"status" form:"status"  validate:"omitempty,min=4,max=8,excludesall=!@#?^#*()_+-=0123456789%&"`
-	Note           string    `json:"note" form:"note"`
-	Todo_date_time time.Time `json:"todo_date_time" form:"todo_date_time"`
+	Title          string `json:"title" form:"title"  validate:"omitempty,min=3,max=50,excludesall=!@#?^#*()_+-=0123456789%&"`
+	Priority       string `json:"priority" form:"priority"  validate:"omitempty,min=3,max=6,excludesall=!@#?^#*()_+-=0123456789%&"`
+	Status         string `json:"status" form:"status"  validate:"omitempty,min=4,max=8,excludesall=!@#?^#*()_+-=0123456789%&"`
+	Note           string `json:"note" form:"note"`
+	Todo_date_time string `json:"todo_date_time" form:"todo_date_time"`
 }
 
 //-----------------------------------------------------

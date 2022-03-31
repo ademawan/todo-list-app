@@ -67,7 +67,7 @@ func (ur *UserRepository) Update(userUid string, newUser entities.User) (entitie
 
 func (ur *UserRepository) Delete(userUid string) error {
 
-	result := ur.database.Where("user_uid =?", userUid).Delete(&entities.Task{})
+	result := ur.database.Where("user_uid =?", userUid).Delete(&entities.User{})
 	if result.Error != nil {
 		return result.Error
 	}
