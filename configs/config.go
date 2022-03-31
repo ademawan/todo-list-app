@@ -15,7 +15,7 @@ type AppConfig struct {
 		Driver   string
 		Name     string
 		Address  string
-		Port     int
+		Port     string
 		Username string
 		Password string
 	}
@@ -36,24 +36,36 @@ func GetConfig() *AppConfig {
 }
 
 func initConfig() *AppConfig {
-	err := godotenv.Load("local.env")
 
-	if err != nil {
-		log.Info(err)
-	}
-	port, errParse := strconv.Atoi(os.Getenv("DB_PORT"))
+	port, errParse := strconv.Atoi(os.Getenv("PORT"))
 	if errParse != nil {
 		log.Warn(errParse)
 	}
 
 	var defaultConfig AppConfig
-	defaultConfig.Port = 8000
+	defaultConfig.Port = port
 	defaultConfig.Database.Driver = os.Getenv("DB_DRIVER")
 	defaultConfig.Database.Name = os.Getenv("DB_NAME")
-	defaultConfig.Database.Address = "localhost"
-	defaultConfig.Database.Port = port
+	defaultConfig.Database.Address = os.Getenv("DB_HOST")
+	defaultConfig.Database.Port = os.Getenv("DB_PORT")
 	defaultConfig.Database.Username = os.Getenv("DB_USERNAME")
 	defaultConfig.Database.Password = os.Getenv("DB_PASSWORD")
+
+	if defaultConfig.Database.Name == "" {
+		err := godotenv.Load("local.env")
+
+		if err != nil {
+			log.Info(err)
+		}
+
+		defaultConfig.Port = 8000
+		defaultConfig.Database.Driver = os.Getenv("DB_DRIVER")
+		defaultConfig.Database.Name = os.Getenv("DB_NAME")
+		defaultConfig.Database.Address = "localhost"
+		defaultConfig.Database.Port = os.Getenv("DB_PORT")
+		defaultConfig.Database.Username = os.Getenv("DB_USERNAME")
+		defaultConfig.Database.Password = os.Getenv("DB_PASSWORD")
+	}
 
 	log.Info(defaultConfig)
 
